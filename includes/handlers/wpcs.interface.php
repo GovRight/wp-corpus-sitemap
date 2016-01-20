@@ -6,6 +6,8 @@ abstract class WpcsInterface {
     protected $_law_slug;
     protected $_url_template;
 
+    abstract public function build();
+
     function __construct($api_url, $law_slug, $url_template) {
         $this->_api_url = $api_url;
         $this->_law_slug = $law_slug;
