@@ -50,10 +50,11 @@ function wpcs_build() {
     $api_url = wpcs_config('corpus_api_url');
     $law_slug = get_option('wpcs_law_slug');
     $url_template = get_option('wpcs_url_template');
+    $is_gxmls_active = is_plugin_active(wpcs_config('gxmls_dep'));
 
     if($api_url && $law_slug && $url_template) {
         require __DIR__ . '/handlers/' . $app . '.class.php';
-        $handler = new $class($api_url, $law_slug, $url_template);
+        $handler = new $class($api_url, $law_slug, $url_template, $is_gxmls_active);
         return $handler->build();
     } else {
         return '';
@@ -80,7 +81,7 @@ function wpcs_is_sitemap_in_gxmls() {
         return false;
     }
     $is = false;
-    $pages = get_option('sm_cpages');
+    $pages = get_option('sm_cpages') ?: array();
     foreach($pages as $page) {
         $page = (array) $page;
         if(!empty($page['wpcs'])) {
@@ -93,7 +94,7 @@ function wpcs_is_sitemap_in_gxmls() {
 function wpcs_add_to_gxmls() {
     if(!wpcs_is_sitemap_in_gxmls()) {
         require WP_CONTENT_DIR . '/plugins/google-sitemap-generator/sitemap-core.php';
-        $pages = get_option('sm_cpages');
+        $pages = get_option('sm_cpages') ?: array();
         $page = new GoogleSitemapGeneratorPage(wpcs_get_url(), 0.9, 'monthly', time(), 0);
         $page->wpcs = true;
         $pages[] = $page;
@@ -103,7 +104,7 @@ function wpcs_add_to_gxmls() {
 
 function wpcs_remove_from_gxmls() {
     if(is_plugin_active(wpcs_config('gxmls_dep'))) {
-        $pages = get_option('sm_cpages');
+        $pages = get_option('sm_cpages') ?: array();
         foreach($pages as $i => $page) {
             $page = (array) $page;
             if(!empty($page['wpcs'])) {
