@@ -14,7 +14,7 @@
                     if(data && data.error) {
                         alert(data.error);
                     } else {
-                        //window.location.reload();
+                        window.location.reload();
                     }
                 });
                 e.preventDefault();
