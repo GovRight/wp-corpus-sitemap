@@ -50,7 +50,7 @@ function wpcs_build() {
     $api_url = wpcs_config('corpus_api_url');
     $law_slug = get_option('wpcs_law_slug');
     $url_template = get_option('wpcs_url_template');
-//var_dump($api_url && $law_slug && $url_template);die;
+
     if($api_url && $law_slug && $url_template) {
         require __DIR__ . '/handlers/' . $app . '.class.php';
         $handler = new $class($api_url, $law_slug, $url_template);
