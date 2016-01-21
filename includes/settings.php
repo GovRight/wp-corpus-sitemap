@@ -11,6 +11,8 @@ function wpcs_add_admin_menu(  ) {
 
 function wpcs_settings_init(  ) {
 
+    register_setting( 'wpcs_settings_page', 'wpcs_gxmls_connected' );
+
     register_setting( 'wpcs_settings_page', 'wpcs_app' );
 
     add_settings_section(

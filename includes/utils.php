@@ -73,44 +73,18 @@ function wpcs_create($path = null) {
     file_put_contents($path, $content);
 }
 
-
-
-
 function wpcs_is_sitemap_in_gxmls() {
-    if(!is_plugin_active(wpcs_config('gxmls_dep'))) {
-        return false;
-    }
-    $is = false;
-    $pages = get_option('sm_cpages') ?: array();
-    foreach($pages as $page) {
-        $page = (array) $page;
-        if(!empty($page['wpcs'])) {
-            $is = true;
-        }
-    }
-    return $is;
+    return get_option('wpcs_gxmls_connected') === '1';
 }
 
 function wpcs_add_to_gxmls() {
     if(!wpcs_is_sitemap_in_gxmls()) {
-        require WP_CONTENT_DIR . '/plugins/google-sitemap-generator/sitemap-core.php';
-        $pages = get_option('sm_cpages') ?: array();
-        $page = new GoogleSitemapGeneratorPage(wpcs_get_url(), 0.9, 'monthly', time(), 0);
-        $page->wpcs = true;
-        $pages[] = $page;
-        update_option('sm_cpages', $pages, 'no');
+        update_option('wpcs_gxmls_connected', '1');
     }
 }
 
 function wpcs_remove_from_gxmls() {
     if(is_plugin_active(wpcs_config('gxmls_dep'))) {
-        $pages = get_option('sm_cpages') ?: array();
-        foreach($pages as $i => $page) {
-            $page = (array) $page;
-            if(!empty($page['wpcs'])) {
-                unset($pages[$i]);
-            }
-        }
-        update_option('sm_cpages', $pages, 'no');
+        update_option('wpcs_gxmls_connected', '0');
     }
 }
